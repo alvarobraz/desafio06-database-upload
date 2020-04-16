@@ -5,7 +5,7 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export default class CreateTransaction1586966470623
+export default class CreateTransaction1587046065328
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
@@ -25,7 +25,7 @@ export default class CreateTransaction1586966470623
           },
           {
             name: 'value',
-            type: 'int',
+            type: 'integer',
           },
           {
             name: 'type',
@@ -34,7 +34,6 @@ export default class CreateTransaction1586966470623
           {
             name: 'category_id',
             type: 'uuid',
-            isNullable: true,
           },
           {
             name: 'created_at',
@@ -53,6 +52,7 @@ export default class CreateTransaction1586966470623
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({
+        name: 'TransactionCategory',
         columnNames: ['category_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'categories',
@@ -63,6 +63,7 @@ export default class CreateTransaction1586966470623
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('categories');
+    await queryRunner.dropForeignKey('transactions', 'TransactionCategory');
+    await queryRunner.dropTable('transactions');
   }
 }
